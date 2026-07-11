@@ -210,9 +210,9 @@ export default function LandingPage() {
               </Link>
               <button 
                 onClick={() => alert("Watch Demo: FlashMind AI uses AI to dissect study papers into core flashcards, providing keyboard study triggers and SM-2 feedback. Login to start immediately!")}
-                className="w-full sm:w-auto px-8 py-4 border-2 border-slate-700 dark:border-white/20 hover:border-primary bg-white dark:bg-slate-800/50 hover:bg-primary/5 dark:hover:bg-slate-800 text-slate-800 dark:text-white font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-sm"
+                className="w-full sm:w-auto px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl shadow-lg shadow-rose-500/30 transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
               >
-                <Play className="h-4 w-4 fill-slate-700 dark:fill-white text-slate-700 dark:text-white" />
+                <Play className="h-4 w-4 fill-white text-white" />
                 Watch Demo
               </button>
             </motion.div>
