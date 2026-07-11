@@ -136,20 +136,20 @@ export default function LandingPage() {
             <div className="h-9 w-9 rounded-lg bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
               <BrainCircuit className="h-5 w-5 text-white" />
             </div>
-            <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+            <span className="logo-text font-extrabold text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 bg-clip-text text-transparent">
               FlashMind <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">AI</span>
             </span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
-            <a href="#features" className="hover:text-white transition-colors">Features</a>
-            <a href="#testimonials" className="hover:text-white transition-colors">Reviews</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-            <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+          <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+            <a href="#features" className="hover:text-primary dark:hover:text-white transition-colors">Features</a>
+            <a href="#testimonials" className="hover:text-primary dark:hover:text-white transition-colors">Reviews</a>
+            <a href="#pricing" className="hover:text-primary dark:hover:text-white transition-colors">Pricing</a>
+            <a href="#faq" className="hover:text-primary dark:hover:text-white transition-colors">FAQ</a>
           </nav>
           <div>
             <Link 
               href={user ? "/dashboard" : "/login"} 
-              className="px-5 py-2 rounded-lg text-sm font-semibold border border-white/10 bg-white/5 hover:bg-white/10 text-white transition-all duration-200 flex items-center gap-1.5 shadow-sm"
+              className="px-5 py-2 rounded-lg text-sm font-bold border-2 border-primary bg-primary hover:bg-primary-hover text-white transition-all duration-200 flex items-center gap-1.5 shadow-md shadow-primary/20"
             >
               {user ? 'Enter Dashboard' : 'Sign In'}
               <ArrowRight className="h-4 w-4" />
