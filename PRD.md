@@ -13,6 +13,8 @@ FlashMind AI is a modern, production-ready, full-stack web application designed 
 
 By combining the structural simplicity of **Notion**, the learning efficacy of **Quizlet**, and the conversational reasoning power of **ChatGPT**, FlashMind AI makes study preparation seamless, automated, and scientifically optimized.
 
+*   **Live Vercel Deployment Link:** https://flash-mind-ai-sigma.vercel.app
+
 ---
 
 ## 2. Target Audience & Personas
