@@ -212,7 +212,7 @@ Expected JSON Schema format:
       "id": 1,
       "type": "MCQ", -- "MCQ" | "True/False" | "Fill Blank"
       "question": "Question text here?",
-      "options": ["Option A", "Option B", "Option C", "Option D"], -- only for MCQ, otherwise empty array
+      "options": ["Option A", "Option B", "Option C", "Option D"], -- for MCQ it lists choices, for True/False it must be ["True", "False"], for Fill Blank it is empty []
       "correctAnswer": "The correct answer text",
       "explanation": "Explanation why this is correct"
     }

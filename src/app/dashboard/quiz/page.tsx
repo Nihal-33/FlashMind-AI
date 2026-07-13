@@ -157,6 +157,14 @@ export default function QuizModePage() {
     }));
   };
 
+  const getQuestionOptions = (q: QuizQuestion) => {
+    if (!q) return [];
+    if (q.type === 'True/False' || q.type === 'True/False' as any || q.type === 'T/F' as any) {
+      return (q.options && q.options.length > 0) ? q.options : ['True', 'False'];
+    }
+    return q.options || [];
+  };
+
   const handleNext = () => {
     if (currentQuestionIndex + 1 < quizQuestions.length) {
       setCurrentQuestionIndex(prev => prev + 1);
@@ -405,7 +413,7 @@ export default function QuizModePage() {
             ) : (
               /* MCQ & True/False options list */
               <div className="grid grid-cols-1 gap-3">
-                {quizQuestions[currentQuestionIndex].options.map((option, idx) => {
+                {getQuestionOptions(quizQuestions[currentQuestionIndex]).map((option, idx) => {
                   const selected = userAnswers[currentQuestionIndex] === option;
                   return (
                     <button
