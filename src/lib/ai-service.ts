@@ -3,9 +3,9 @@
 const API_KEY = process.env.DEEPSEEK_API_KEY || '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';
 const BASE_URL = 'https://integrate.api.nvidia.com/v1';
 const MODELS = [
+  'meta/llama-3.1-8b-instruct',
   'deepseek-ai/deepseek-v4-flash',
-  'nvidia/llama-3.1-nemotron-70b-instruct',
-  'meta/llama-3.1-8b-instruct'
+  'nvidia/llama-3.1-nemotron-70b-instruct'
 ];
 
 // Helper to execute AI fetch with retry logic and fallback models

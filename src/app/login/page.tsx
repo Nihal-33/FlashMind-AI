@@ -114,7 +114,7 @@ export default function LoginPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center text-slate-400">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 bg-grid">
         <div className="flex flex-col items-center space-y-4">
           <Loader2 className="h-8 w-8 text-primary animate-spin" />
           <p className="text-sm font-semibold">Initializing FlashMind AI...</p>
@@ -124,15 +124,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col justify-center py-12 px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-950 flex flex-col justify-center py-12 px-6 lg:px-8 relative overflow-hidden bg-grid">
       
       {/* Background Glows */}
-      <div className="absolute top-[20%] left-[20%] w-[350px] h-[350px] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[20%] w-[350px] h-[350px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-[20%] left-[20%] w-[350px] h-[350px] bg-primary/10 rounded-full blur-[100px] pointer-events-none animate-float-slow" />
+      <div className="absolute bottom-[20%] right-[20%] w-[350px] h-[350px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none animate-float-reverse" />
 
       {/* Back button */}
       <div className="absolute top-8 left-8">
-        <Link href="/" className="flex items-center text-sm font-medium text-slate-400 hover:text-white transition">
+        <Link href="/" className="flex items-center text-sm font-medium text-slate-400 hover:text-slate-200 transition">
           <ArrowLeft className="h-4 w-4 mr-1.5" />
           Back to Home
         </Link>
@@ -305,7 +305,7 @@ export default function LoginPage() {
             <button
               onClick={handleOAuthLogin}
               disabled={loading}
-              className="w-full py-2.5 border border-white/10 hover:border-white/20 bg-slate-900 hover:bg-slate-950 text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2.5 transition"
+              className="w-full py-2.5 border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 text-sm font-semibold rounded-xl flex items-center justify-center gap-2.5 transition"
             >
               <svg className="h-4.5 w-4.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
