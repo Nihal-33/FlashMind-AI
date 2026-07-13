@@ -47,6 +47,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searching, setSearching] = useState(false);
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   
   // Route Protection
   useEffect(() => {
@@ -84,6 +87,76 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const timer = setTimeout(performSearch, 300);
     return () => clearTimeout(timer);
   }, [searchQuery, user]);
+
+  const fetchNotifications = async () => {
+    if (!user) return;
+    try {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
+      if (!error && data) {
+        setNotifications(data);
+        setUnreadCount(data.filter(n => !n.read).length);
+      }
+    } catch (err) {
+      console.error('Error fetching notifications:', err);
+    }
+  };
+
+  const markAsRead = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read: true })
+        .eq('id', id);
+      if (!error) {
+        fetchNotifications();
+      }
+    } catch (err) {
+      console.error('Error marking notification read:', err);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    if (!user) return;
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read: true })
+        .eq('user_id', user.id)
+        .eq('read', false);
+      if (!error) {
+        fetchNotifications();
+      }
+    } catch (err) {
+      console.error('Error marking all notifications read:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchNotifications();
+      
+      const subscription = supabase
+        .channel(`public:notifications:${user.id}`)
+        .on('postgres_changes', { 
+          event: 'INSERT', 
+          schema: 'public', 
+          table: 'notifications',
+          filter: `user_id=eq.${user.id}`
+        }, () => {
+          fetchNotifications();
+        })
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(subscription);
+      };
+    }
+  }, [user]);
 
   if (loading) {
     return (
@@ -264,10 +337,67 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </button>
 
             {/* Notifications panel toggle */}
-            <button className="p-2 rounded-lg border border-white/10 bg-slate-800/50 hover:bg-slate-800 hover:text-white transition relative">
-              <Bell className="h-4.5 w-4.5" />
-              <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-primary" />
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => setNotificationsOpen(!notificationsOpen)}
+                className="p-2 rounded-lg border border-white/10 bg-slate-800/50 hover:bg-slate-800 hover:text-slate-200 transition relative"
+                title="Notifications"
+              >
+                <Bell className="h-4.5 w-4.5" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                )}
+              </button>
+
+              {notificationsOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setNotificationsOpen(false)} />
+                  <div className="absolute right-0 mt-2 w-80 glass border border-slate-700/30 dark:border-white/10 shadow-2xl rounded-2xl py-3 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="flex justify-between items-center px-4 pb-2.5 border-b border-slate-700/10 dark:border-white/5">
+                      <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Notifications ({unreadCount})</span>
+                      {unreadCount > 0 && (
+                        <button 
+                          onClick={markAllAsRead} 
+                          className="text-[10px] text-primary hover:text-primary-hover font-semibold transition"
+                        >
+                          Mark all read
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="max-h-64 overflow-y-auto no-scrollbar py-1">
+                      {notifications.length === 0 ? (
+                        <div className="px-4 py-8 text-center text-xs text-slate-500">
+                          No new notifications.
+                        </div>
+                      ) : (
+                        notifications.map((n) => (
+                          <div 
+                            key={n.id} 
+                            onClick={() => {
+                              markAsRead(n.id);
+                              setNotificationsOpen(false);
+                            }}
+                            className={`px-4 py-3 border-b border-slate-700/5 dark:border-white/5 last:border-none text-left cursor-pointer transition ${
+                              n.read ? 'hover:bg-slate-100/50 dark:hover:bg-white/5 opacity-60' : 'bg-primary/5 hover:bg-primary/10'
+                            }`}
+                          >
+                            <div className="flex justify-between items-start">
+                              <span className={`text-xs font-bold ${n.read ? 'text-slate-500 dark:text-slate-400' : 'text-slate-900 dark:text-white'}`}>{n.title}</span>
+                              {!n.read && <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1" />}
+                            </div>
+                            <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{n.content}</p>
+                            <span className="text-[8px] text-slate-400 dark:text-slate-500 block mt-1.5">
+                              {new Date(n.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </header>
 
