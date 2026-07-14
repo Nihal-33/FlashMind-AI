@@ -19,7 +19,8 @@ import {
   Shield,
   Layers,
   Sun,
-  Moon
+  Moon,
+  X
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useTheme } from '@/context/theme-context';
@@ -28,6 +29,7 @@ export default function LandingPage() {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [demoVideoOpen, setDemoVideoOpen] = useState(false);
 
   const toggleFaq = (index: number) => {
     setActiveFaq(activeFaq === index ? null : index);
@@ -221,7 +223,7 @@ export default function LandingPage() {
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <button 
-                onClick={() => alert("Watch Demo: FlashMind AI uses AI to dissect study papers into core flashcards, providing keyboard study triggers and SM-2 feedback. Login to start immediately!")}
+                onClick={() => setDemoVideoOpen(true)}
                 className="w-full sm:w-auto px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl shadow-lg shadow-rose-500/30 transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
               >
                 <Play className="h-4 w-4 fill-white text-white" />
@@ -499,6 +501,45 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Demo Video Modal */}
+      {demoVideoOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Overlay */}
+          <div 
+            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity duration-300"
+            onClick={() => setDemoVideoOpen(false)}
+          />
+          
+          {/* Modal Container */}
+          <div className="relative w-full max-w-4xl glass border border-slate-700/30 dark:border-white/10 shadow-2xl rounded-3xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-300">
+            {/* Header */}
+            <div className="flex justify-between items-center p-5 border-b border-slate-700/10 dark:border-white/5">
+              <div className="flex items-center gap-2 text-primary font-bold">
+                <Play className="h-5 w-5 fill-primary text-primary" />
+                <span className="text-slate-900 dark:text-white font-extrabold text-sm md:text-base uppercase tracking-wider">FlashMind AI Study Demo</span>
+              </div>
+              <button 
+                onClick={() => setDemoVideoOpen(false)}
+                className="p-1.5 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-300 dark:border-white/10 transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            {/* Video Wrapper */}
+            <div className="relative aspect-video w-full bg-black">
+              <iframe
+                src="https://www.youtube.com/embed/ukLnPbIffxE?autoplay=1"
+                title="FlashMind AI Spaced Repetition Demo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full border-none"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
