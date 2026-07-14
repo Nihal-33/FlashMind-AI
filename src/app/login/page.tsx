@@ -45,16 +45,47 @@ export default function LoginPage() {
     setLoading(true);
     setErrorMsg('');
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`
-        }
+      setSuccessMsg('Simulating Google Sign-In with Demo Account...');
+      
+      const email = 'google-demo@university.edu';
+      const password = 'DemoPassword123';
+      
+      // Try to sign in first
+      let { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
-      if (error) throw error;
+
+      if (error && (error.message.includes('Invalid login credentials') || error.message.includes('Email not confirmed'))) {
+        // Automatically register the demo Google user
+        const signUpRes = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              name: 'Google Demo User',
+              avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80',
+            }
+          }
+        });
+
+        if (signUpRes.error) throw signUpRes.error;
+
+        // Try signing in again
+        const signInRes = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (signInRes.error) throw signInRes.error;
+      } else if (error) {
+        throw error;
+      }
     } catch (err: any) {
-      setErrorMsg(err.message || 'Google authentication failed.');
+      console.error('Google Sign-In Simulation error:', err);
+      setErrorMsg(err.message || 'Simulated Google authentication failed.');
       setLoading(false);
+      setSuccessMsg('');
     }
   };
 
