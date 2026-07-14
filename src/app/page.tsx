@@ -517,7 +517,7 @@ export default function LandingPage() {
             <div className="flex justify-between items-center p-5 border-b border-slate-700/10 dark:border-white/5">
               <div className="flex items-center gap-2 text-primary font-bold">
                 <Play className="h-5 w-5 fill-primary text-primary" />
-                <span className="text-slate-900 dark:text-white font-extrabold text-sm md:text-base uppercase tracking-wider">FlashMind AI Study Demo</span>
+                <span className="text-slate-200 font-extrabold text-sm md:text-base uppercase tracking-wider">FlashMind AI Study Demo</span>
               </div>
               <button 
                 onClick={() => setDemoVideoOpen(false)}
